@@ -3,13 +3,6 @@ import json
 with open("sortie.json", "r", encoding="utf-8") as f:
     données = json.load(f)
 
- 
-""""
-with open("sortie", "w", encoding="utf-8") as f:
-    json.dump(données, f, sort_keys=True, indent=4)
-"""
-
-
 
 def temp_moy_departement(données):
     dico={}
@@ -41,17 +34,22 @@ def tmp_date(tmp,date,données):
 
 #tmp_date("tmax","2025-05-12",données)
 
-def dico_couleur(date,données):
-    dico={}
-    dico1={}
-    for i in range(len(données)):
-        if données[i]["date_obs"] == date:
-            dico[données[i]["departement"]]=dico1
-            
-
-    print (dico)
 
 
-dico_couleur("2025-05-12",données)
-print(len(données))
-#dico de dico avec le departemnt: la date la temperature et couleur hexa en focntion de la tmp moy
+def couleur(tmp):
+    if 0<tmp<5:
+        return "#FFB299" 
+    if 5<tmp<10:
+        return "#FFA285"
+    if 10<tmp<15:
+        return "#FF9272" 
+    if 15<tmp<20:
+        return "#FF825F" 
+    if 20<tmp<25:
+        return "#FD704D" 
+    if 30<tmp<35:
+        return "#FA5E3A" 
+    if 30<tmp :
+        return "#F54927" 
+
+
