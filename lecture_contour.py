@@ -77,7 +77,7 @@ def dessiner_carte(donnees):
             polygone(poly_ecran, couleur='black', remplissage='')
 
     attend_ev()
-    ferme_fenetre()
+    attend_fermeture()
 
 if __name__ == "__main__":
     mes_deps = charger_donnees_departements("departements-20180101")
