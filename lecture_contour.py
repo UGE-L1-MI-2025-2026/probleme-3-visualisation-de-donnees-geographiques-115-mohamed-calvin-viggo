@@ -1,4 +1,4 @@
-from shapefile import *
+from shapefile_utils import *
 from fltk import*
 
 # TÂCHE 1 : CHARGEMENT DES DONNÉES 
