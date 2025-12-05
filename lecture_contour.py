@@ -1,5 +1,6 @@
-from shapefile_utils import *
+from shapefile import *
 from fltk import*
+from constantes import *
 
 # TÂCHE 1 : CHARGEMENT DES DONNÉES 
 def charger_donnees_departements(chemin_fichier):
@@ -47,37 +48,38 @@ def latitude_vers_y(lat, min_lat, max_lat, hauteur_ecran):
     """Transforme une latitude en position Y sur l'écran"""
     return hauteur_ecran - ((lat - min_lat) * hauteur_ecran / (max_lat - min_lat))
 
-# TÂCHE 2 : DESSIN 
+# TÂCHE 2 : DESSIN AVEC FLTK
 def dessiner_carte(donnees):
-    # Paramètres de la fenêtre
-    Largeur = 800
-    Hauteur = 800
-
-    cree_fenetre(Largeur, Hauteur)
     
-    # Cadrage approximatif de la France , en gros ont la borne
-    MIN_LON, MAX_LON = -5.5, 10.0
-    MIN_LAT, MAX_LAT = 41.0, 51.5
     
-    # Boucle pour dessiner chaque département
+    cree_fenetre(LARGEUR_FENETRE, HAUTEUR_FENETRE)
+    
+    
+    
+    # 3. Boucle principale de dessin
     for dep in donnees:
-        # Un département peut avoir plusieurs morceaux (îles)
         for poly in dep["polygones"]:
-            poly_ecran = [] # Liste pour les points convertis en pixels
+            poly_ecran = [] 
             
             for point in poly:
                 lon, lat = point
                 
-                # Conversion WGS84 => Pixels
-                x = longitude_vers_x(lon, MIN_LON, MAX_LON, Largeur)
-                y = latitude_vers_y(lat, MIN_LAT, MAX_LAT, Hauteur)
+                # Conversion WGS84 -> Pixels pour l'espace CARTE
+                x_local = longitude_vers_x(lon, MIN_LON, MAX_LON, Largeur)
+                y_local = latitude_vers_y(lat, MIN_LAT, MAX_LAT, Hauteur)
                 
-                poly_ecran.append((x, y))
+                # Réajustement des pixels à l'intérieur de la FENÊTRE
+                x_final = x_local + X_DEBUT
+                y_final = y_local + Y_DEBUT
+                
+                poly_ecran.append((x_final, y_final))
             
+            # Dessin : remplissage='' laisse la zone blanche à l'intérieur
             polygone(poly_ecran, couleur='black', remplissage='')
 
+    # Gestion de la fenêtre
     attend_ev()
-    attend_fermeture()
+    ferme_fenetre()
 
 if __name__ == "__main__":
     mes_deps = charger_donnees_departements("departements-20180101")
