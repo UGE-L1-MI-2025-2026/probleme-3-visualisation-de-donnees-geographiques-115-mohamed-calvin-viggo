@@ -1,6 +1,6 @@
 from fltk import *
 import netCDF4
-from shapefile_utils import *
+from shapefile import *
 import sys
 
 # --- IMPORTATION DU TRAVAIL DE MOHAMED UNIQUEMENT ---

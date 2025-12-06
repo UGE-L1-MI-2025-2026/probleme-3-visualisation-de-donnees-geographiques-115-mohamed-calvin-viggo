@@ -33,18 +33,27 @@ def tmp_date(tmp,date,données):
 
 #tmp_date("tmax","2025-05-12",données)
 
-def cree_dico(donées):
-    dictionnaire={}
-    for dico in donées:
-        tmp={"date":dico["date_obs"]}
-        if dico["tmoy"]!=None:
-            tmp["couleur"]=couleur(dico["tmoy"])
-            dictionnaire[dico["departement"]]=tmp
-        else:
-            tmp["couleur"]=None
-            dictionnaire[dico["departement"]]=tmp       
-    return dictionnaire
 
+def cree_dico_date(données):
+    dico={}
+    for i in range(len(données)):
+        dico[données[i]["departement"]]=données[i]["date_obs"]
+    return dico
+print(cree_dico_date(données))
+
+def cree_dico_dates(données):
+    dico={}
+    for i in range(len(données)):
+        date=données[i]["date_obs"]
+        dep=données[i]["departement"]
+        if dep not in dico:
+            res=[]
+            dico[dep]=res
+        if date not in dico[dep]:
+            dico[dep].append(date)    
+    return dico["Charente"]
+
+#print(cree_dico_dates(données))
 
 def couleur(tmp):
     if 0<tmp<5:
@@ -64,5 +73,16 @@ def couleur(tmp):
     if 30<tmp :
         return "#F54927" 
 
-print (cree_dico(données))
+def cree_dico(donées):
+    dictionnaire={}
+    for dico in donées:
+        tmp={"date":dico["date_obs"]}
+        if dico["tmoy"]!=None:
+            tmp["couleur"]=couleur(dico["tmoy"])
+            dictionnaire[dico["departement"]]=tmp
+        else:
+            tmp["couleur"]=None
+            dictionnaire[dico["departement"]]=tmp       
+    return dictionnaire
 
+#print(cree_dico(données))
