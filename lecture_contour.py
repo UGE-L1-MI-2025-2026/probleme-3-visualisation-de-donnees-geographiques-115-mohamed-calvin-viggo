@@ -1,6 +1,28 @@
 from shapefile import *
-from fltk import*
+from fltk import *
 from constantes import *
+
+def legende():
+    x,x2=950,850
+    y,y2=0,110
+    rectangle(x,y,x2,y2,remplissage="#FFC2AD")
+    rectangle(x,y+110,x2,y2+220,remplissage="#FFB299")
+    rectangle(x,y+220,x2,y2+330,remplissage="#FFA285")
+    rectangle(x,y+330,x2,y2+440,remplissage="#FF9272")
+    rectangle(x,y+440,x2,y2+550,remplissage="#FF825F")
+    rectangle(x,y+550,x2,y2+660,remplissage="#FD704D")
+    rectangle(x,y+660,x2,y2+770,remplissage="#FA5E3A")
+    rectangle(x,y+770,x2,y2+880,remplissage="#F54927")
+    texte(x2,y,chaine="0",taille=15)
+    texte(x2,y+110,chaine="5",taille=15)
+    texte(x2,y+220,chaine="10",taille=15)
+    texte(x2,y+330,chaine="15",taille=15)
+    texte(x2,y+440,chaine="20",taille=15)
+    texte(x2,y+550,chaine="25",taille=15)
+    texte(x2,y+660,chaine="30",taille=15)
+    texte(x2,y+770,chaine="35",taille=15)
+    
+
 
 # TÂCHE 1 : CHARGEMENT DES DONNÉES 
 def charger_donnees_departements(chemin_fichier):
@@ -55,7 +77,7 @@ def dessiner_carte(donnees):
     cree_fenetre(LARGEUR_FENETRE, HAUTEUR_FENETRE)
     
     
-    
+    legende()
     # 3. Boucle principale de dessin
     for dep in donnees:
         for poly in dep["polygones"]:
