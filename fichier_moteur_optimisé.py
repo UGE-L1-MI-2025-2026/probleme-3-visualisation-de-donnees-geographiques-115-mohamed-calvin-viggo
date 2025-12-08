@@ -126,6 +126,22 @@ def main():
         print(f"erreur chargement carte : {e}")
         return
 
+    # --- OPTIMISATION : Pré-calcul des coordonnées d'écran ---
+    # On calcule une fois pour toutes la position des polygones sur l'écran
+    # pour ne pas refaire ces milliers de calculs à chaque image.
+    print("optimisation des traces...")
+    for d in departements:
+        d["polygones_ecran"] = []
+        for poly in d["polygones"]:
+            pts_ecran = []
+            for pt in poly:
+                lon, lat = pt
+                x = longitude_vers_x(lon, Min_lon, Max_lon, Largeur)
+                y = latitude_vers_y(lat, Min_lat, Max_lat, Hauteur)
+                pts_ecran.append((x, y))
+            d["polygones_ecran"].append(pts_ecran)
+    # --- FIN OPTIMISATION ---
+
     dates = get_dates(données)
     
     if len(dates) == 0:
@@ -149,11 +165,11 @@ def main():
     print("\n--- Mode interactif activé ---")
     print("Flèches: jour suivant/précédent")
     print("Touche 'S': Saisie de date par la console.")
-    print("Touches 'T'/'Y': Mois +/-")
-    print("Touches 'G'/'H': Année +/-")
+    print("Touches 'A'/'D': Mois +/-")
+    print("Touches 'G'/'F': Année +/-")
 
     while encours:
-        ev = attend_ev()
+        ev = attend_ev() # On utilise donne_ev pour ne pas bloquer si on veut une animation continue plus tard
         
         if ev is not None:
             t = type_ev(ev)
@@ -177,25 +193,25 @@ def main():
                 elif touche_actuelle == 'Left':
                     if index_date > 0: index_date -= 1; refresh = True
 
-                # Navigation Mois (T/Y) - approx 30 jours
-                elif touche_actuelle in ['t', 'T']: # Avancer mois
+                # Navigation Mois (A/D) - approx 30 jours
+                elif touche_actuelle in ['d', 'D']: # Avancer mois
                     current_dt = datetime.strptime(dates[index_date], "%Y-%m-%d")
                     target_dt = current_dt + timedelta(days=30)
                     index_date = trouver_index_proche(target_dt, dates)
                     refresh = True
-                elif touche_actuelle in ['y', 'Y']: # Reculer mois
+                elif touche_actuelle in ['a', 'A', 'q', 'Q']: # Reculer mois (A ou Q pour azerty)
                     current_dt = datetime.strptime(dates[index_date], "%Y-%m-%d")
                     target_dt = current_dt - timedelta(days=30)
                     index_date = trouver_index_proche(target_dt, dates)
                     refresh = True
 
-                # Navigation Année (G/H) - approx 365 jours
-                elif touche_actuelle in ['g', 'G']: # Avancer année
+                # Navigation Année (F/G) - approx 365 jours
+                elif touche_actuelle in ['f', 'F']: # Avancer année
                     current_dt = datetime.strptime(dates[index_date], "%Y-%m-%d")
                     target_dt = current_dt + timedelta(days=365)
                     index_date = trouver_index_proche(target_dt, dates)
                     refresh = True
-                elif touche_actuelle in ['h', 'H']: # Reculer année
+                elif touche_actuelle in ['g', 'G']: # Reculer année
                     current_dt = datetime.strptime(dates[index_date], "%Y-%m-%d")
                     target_dt = current_dt - timedelta(days=365)
                     index_date = trouver_index_proche(target_dt, dates)
@@ -206,7 +222,7 @@ def main():
             date_actuelle = dates[index_date]
             
             # --- AFFICHAGE INFO (HAUT GAUCHE) ---
-            texte(10, 10, f"Mois: A/D | Année: G/F", taille=12, couleur='black')
+            texte(10, 10, f"Mois: T/Y | Année: G/H", taille=12, couleur='black')
             texte(10, 30, "Touche 'S' pour saisir une date", taille=10, couleur='black')
             
             # --- CARTE ET COULEURS ---
@@ -219,14 +235,9 @@ def main():
                 except Exception:
                     c = "grey" 
                 
-                for poly in d["polygones"]:
-                    pts_ecran = []
-                    for pt in poly:
-                        lon, lat = pt
-                        x = longitude_vers_x(lon, Min_lon, Max_lon, Largeur)
-                        y = latitude_vers_y(lat, Min_lat, Max_lat, Hauteur)
-                        pts_ecran.append((x, y))
-                    
+                # UTILISATION DU PRÉ-CALCUL
+                # Au lieu de recalculer longitude_vers_x à chaque frame, on utilise la liste pré-calculée
+                for pts_ecran in d["polygones_ecran"]:
                     polygone(pts_ecran, couleur='black', remplissage=c, epaisseur=1)
 
             # --- RÈGLE GRADUÉE ---
