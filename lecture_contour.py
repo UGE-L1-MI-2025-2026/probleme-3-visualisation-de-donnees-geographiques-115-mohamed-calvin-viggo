@@ -65,8 +65,8 @@ def dessiner_carte(donnees):
                 lon, lat = point
                 
                 # Conversion WGS84 -> Pixels pour l'espace CARTE
-                x_local = longitude_vers_x(lon, MIN_LON, MAX_LON, Largeur)
-                y_local = latitude_vers_y(lat, MIN_LAT, MAX_LAT, Hauteur)
+                x_local = longitude_vers_x(lon, Min_lon, Max_lon, Largeur)
+                y_local = latitude_vers_y(lat, Min_lat, Max_lat, Hauteur)
                 
                 # Réajustement des pixels à l'intérieur de la FENÊTRE
                 x_final = x_local + X_DEBUT
