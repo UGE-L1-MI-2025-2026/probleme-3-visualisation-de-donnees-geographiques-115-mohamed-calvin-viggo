@@ -2,26 +2,27 @@ from shapefile import *
 from fltk import *
 from constantes import *
 
+
 def legende():
-    x,x2=950,850
-    y,y2=0,110
-    rectangle(x,y,x2,y2,remplissage="#FFC2AD")
-    rectangle(x,y+110,x2,y2+220,remplissage="#FFB299")
-    rectangle(x,y+220,x2,y2+330,remplissage="#FFA285")
-    rectangle(x,y+330,x2,y2+440,remplissage="#FF9272")
-    rectangle(x,y+440,x2,y2+550,remplissage="#FF825F")
-    rectangle(x,y+550,x2,y2+660,remplissage="#FD704D")
-    rectangle(x,y+660,x2,y2+770,remplissage="#FA5E3A")
-    rectangle(x,y+770,x2,y2+880,remplissage="#F54927")
-    texte(x2,y,chaine="0",taille=15)
-    texte(x2,y+110,chaine="5",taille=15)
-    texte(x2,y+220,chaine="10",taille=15)
-    texte(x2,y+330,chaine="15",taille=15)
-    texte(x2,y+440,chaine="20",taille=15)
-    texte(x2,y+550,chaine="25",taille=15)
-    texte(x2,y+660,chaine="30",taille=15)
-    texte(x2,y+770,chaine="35",taille=15)
-    
+    couleur=["#2b83ba", "#4fb1a8", "#7fd36e", "#d6e85a",
+            "#ffd166", "#ff8a4c", "#ff5a2b", "#b2182b"]
+    tmp=["0-5°C", "5-10°C", "10-15°C", "15-20°C", "20-25°C", "25-30°C", "30-35°C", "+35°C"]
+    x2=LARGEUR_FENETRE - 8
+    x1=x2-44
+    y1=0
+    y2=HAUTEUR_FENETRE
+    n=len(couleur)
+    hauteur=(y2 - y1) / n
+    rectangle(x1 - 4, y1, x2 + 4, y2, remplissage="#f7f7f7", couleur="#666666", epaisseur=1)
+    for i, couleurs in enumerate(couleur):
+        y0 = y1 + i * hauteur
+        ya = y0 + hauteur
+        rectangle(x1, y0, x2, ya, remplissage=couleurs, couleur=couleurs, epaisseur=0)
+    for i, tmps in enumerate(tmp):
+        y = y1 + i * hauteur + hauteur / 2
+        texte(x1 - 8, y, chaine=tmps, taille=12, ancrage="e")
+    texte(723, 8, chaine="Temp (°C)", taille=12, ancrage="w")  
+
 
 
 # TÂCHE 1 : CHARGEMENT DES DONNÉES 
