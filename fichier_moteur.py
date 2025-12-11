@@ -4,6 +4,7 @@ from lecture_contour import charger_donnees_departements, longitude_vers_x, lati
 from fichier import couleur, tmp_departement_date, données
 from constantes import *
 
+# --- fonction utilitaire pour formater la date ---
 def formater_date_fr(dt_obj, format_type="full"):
     if format_type == "full":
         jour = str(dt_obj.day).zfill(2)
@@ -14,6 +15,7 @@ def formater_date_fr(dt_obj, format_type="full"):
         return str(dt_obj.year)
     return ""
 
+#fonction pour extraire les dates
 def get_dates(data):
     dates_set = set()
     if isinstance(data, dict):
@@ -27,6 +29,7 @@ def get_dates(data):
              date_key = "date_obs" if "date_obs" in e else "date"
              dates_set.add(e[date_key])
     return sorted(list(dates_set))
+
 
 def trouver_index_proche(target_dt, dates_str_list):
     best_idx = 0
@@ -42,12 +45,16 @@ def trouver_index_proche(target_dt, dates_str_list):
             continue
     return best_idx
 
+# fonction de saisie de date avec vérification
 def saisir_date_console(dates_disponibles):
     while True:
         print("\n--- Saisie de date ---")
         date_nouvelle_str_fr = input("Entrez la date (format JJ-MM-AAAA) : ")
         try:
+             # validation de l'entrée utilisateur (JJ-MM-AAAA)
+            
             date_obj = datetime.strptime(date_nouvelle_str_fr, "%d-%m-%Y") 
+            # Conversion au format des données (AAAA-MM-JJ)
             date_recherchee_iso = date_obj.strftime("%Y-%m-%d")
             if date_recherchee_iso in dates_disponibles:
                 new_index = dates_disponibles.index(date_recherchee_iso)
@@ -116,7 +123,7 @@ def dessiner_regle(index_date, dates_dispo, date_min_dt, date_max_dt):
     texte(LARGEUR_FENETRE - marge_x, y_regle + 15, formater_date_fr(date_max_dt, "year"), taille=10, ancrage="ne")
 
 def main():
-    # 1. On crée la fenêtre avec la taille TOTALE (incluant la marge pour la légende)
+    # On crée la fenêtre avec la taille TOTALE avec legende
     cree_fenetre(LARGEUR_FENETRE, HAUTEUR_FENETRE)
     
     print("chargement de la carte...")
@@ -126,7 +133,7 @@ def main():
         print(f"erreur chargement carte : {e}")
         return
 
-    # OPTIMISATION ET CADRAGE
+    # cadrage de la carte dans la  fenêtre
     for d in departements:
         d["polygones_ecran"] = []
         for poly in d["polygones"]:
@@ -134,11 +141,11 @@ def main():
             for pt in poly:
                 lon, lat = pt
                 
-                # A. Calcul des coordonnées locales (sur la carte seule)
+                # Calcul des coordonnée locales
                 x_local = longitude_vers_x(lon, Min_lon, Max_lon, Largeur)
                 y_local = latitude_vers_y(lat, Min_lat, Max_lat, Hauteur)
                 
-                # B. Ajout du décalage pour placer la carte dans la grande fenêtre
+                #Ajout du décalage pour placer la carte dans la grande fenêtre
                 x_final = x_local + X_DEBUT
                 y_final = y_local + Y_DEBUT
                 
@@ -177,7 +184,7 @@ def main():
                 encours = False
             elif t == 'Touche':
                 touche_actuelle = touche(ev)
-                
+                #Enchainement des conditions pour naviguer dans les dates
                 if touche_actuelle in ['d', 'D']:
                     nouvel_index = saisir_date_console(dates)
                     if nouvel_index is not None:
@@ -206,7 +213,9 @@ def main():
                     cur = datetime.strptime(dates[index_date], "%Y-%m-%d")
                     index_date = trouver_index_proche(cur - timedelta(days=365), dates)
                     refresh = True
-
+                    
+        #processus de rafraîchissement de l'affichage à chaque 
+        # clique pour executer la demande d el'utilisateur 
         if refresh:
             efface_tout()
             date_actuelle = dates[index_date]
@@ -224,7 +233,8 @@ def main():
                     polygone(pts_ecran, couleur='black', remplissage=c, epaisseur=1)
 
             dessiner_regle(index_date, dates, date_min_dt, date_max_dt)
-            legende() # Maintenant elle aura sa place à droite
+            #appel focntion de viggo 
+            legende()
             
             mise_a_jour()
             refresh = False
