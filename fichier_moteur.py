@@ -16,7 +16,7 @@ def formater_date_fr(dt_obj, format_type="full"):
     return ""
 
 #fonction pour extraire les dates
-def get_dates(data):
+def recuperer_dates(data):
     dates_set = set()
     if isinstance(data, dict):
         elements = data.values()
@@ -153,7 +153,7 @@ def main():
                 
             d["polygones_ecran"].append(pts_ecran)
 
-    dates = get_dates(données)
+    dates = recuperer_dates(données)
     if not dates:
         ferme_fenetre()
         return
