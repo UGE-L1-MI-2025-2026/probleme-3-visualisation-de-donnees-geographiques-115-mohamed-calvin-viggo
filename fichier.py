@@ -3,19 +3,6 @@ import json
 with open("tmp.json", "r", encoding="utf-8") as f:
     données = json.load(f)
 
-def temp_moy_departement(données):
-    dico={}
-    for i in range(len(données)):
-        dico[données[i]["departement"]]=données[i]["tmoy"]
-
-#print(temp_moy_departement(données))
-
-def tmp_departement(dpt,tmp,données):
-    for i in range(len(données)):
-        if données[i]["departement"] == dpt:
-            return données[i][str(tmp)]
-
-#tmp_departement("Charente","tmoy",données)
 
 def tmp_departement_date(dpt,tmp,date,données):
     for i in range(len(données)):
@@ -23,12 +10,6 @@ def tmp_departement_date(dpt,tmp,date,données):
             if données[i]["date_obs"]==date:
                 return données[i][str(tmp)]
 
-#tmp_departement_date("Charente","tmoy","2025-05-12",données)
-
-def tmp_date(tmp,date,données):
-    for i in range(len(données)):
-        if données[i]["date_obs"] == date:
-            return données[i][str(tmp)]
         
 def couleur(tmp):
     if 0<tmp<5:

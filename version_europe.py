@@ -1,6 +1,6 @@
 from shapefile import *
 from fltk import *
-from constantes import *
+from constantes_europe import *
 
 
 # TÂCHE 1 : CHARGEMENT DES DONNÉES 

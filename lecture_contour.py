@@ -2,7 +2,7 @@ from shapefile import *
 from fltk import *
 from constantes import *
 
-
+"""
 def legende():
     couleur=["#2b83ba", "#4fb1a8", "#7fd36e", "#d6e85a",
             "#ffd166", "#ff8a4c", "#ff5a2b", "#b2182b"]
@@ -22,7 +22,7 @@ def legende():
         y = y1 + i * hauteur + hauteur / 2
         texte(x1 - 8, y, chaine=tmps, taille=12, ancrage="e")
     texte(723, 8, chaine="Temp (°C)", taille=12, ancrage="w")  
-
+"""
 
 
 # TÂCHE 1 : CHARGEMENT DES DONNÉES 

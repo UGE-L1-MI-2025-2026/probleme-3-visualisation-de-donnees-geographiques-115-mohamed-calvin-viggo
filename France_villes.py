@@ -87,7 +87,7 @@ def dessiner_carte_avec_villes(donnees_deps, donnees_villes):
         
         # Dessin du point (cercle) et de l'étiquette
         cercle(x_ville, y_ville, rayon, couleur='red', remplissage='red')
-        texte(x_ville + rayon + 2, y_ville - rayon, ville["nom"], couleur='pink')
+        texte(x_ville + rayon + 2, y_ville - rayon, ville["nom"], couleur='blue')
         
     
     attend_ev()
