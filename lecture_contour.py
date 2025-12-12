@@ -78,7 +78,7 @@ def dessiner_carte(donnees):
     cree_fenetre(LARGEUR_FENETRE, HAUTEUR_FENETRE)
     
     
-    legende()
+    
     # 3. Boucle principale de dessin
     for dep in donnees:
         for poly in dep["polygones"]:
